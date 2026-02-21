@@ -1,0 +1,311 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ember:        #e8602c;
+  --ember-bright: #ff7a42;
+  --ice:          #8ec8e8;
+  --gold:         #d4a84b;
+  --noir:         #04040a;
+  --noir2:        #07070f;
+  --radius:       18px;
+  --ease-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-quart:   cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+html { scroll-behavior: auto; font-size: 16px; }
+
+body {
+  background: var(--noir);
+  color: rgba(255,255,255,0.82);
+  font-family: 'Times New Roman', Times, serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── Custom cursor ── */
+#cursor {
+  position: fixed; width: 8px; height: 8px;
+  background: var(--ember); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+}
+#cursor-ring {
+  position: fixed; width: 36px; height: 36px;
+  border: 1px solid rgba(232,96,44,0.32); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s var(--ease-expo), height 0.5s var(--ease-expo), border-color 0.3s;
+}
+a, button { cursor: none; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: var(--noir2); }
+::-webkit-scrollbar-thumb { background: var(--ember); border-radius: 2px; }
+
+/* ── Film grain ── */
+.noise::after {
+  content: '';
+  position: fixed; inset: -50%; width: 200%; height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.018; pointer-events: none; z-index: 1000;
+  animation: noiseShift 9s steps(2) infinite;
+}
+@keyframes noiseShift {
+  0%  { transform: translate(0,0); }
+  25% { transform: translate(-4%,-4%); }
+  50% { transform: translate(4%,4%); }
+  75% { transform: translate(-4%,4%); }
+  100%{ transform: translate(4%,-4%); }
+}
+
+/* ── Floating orbs ── */
+.orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(90px); pointer-events: none;
+  animation: orbFloat 14s ease-in-out infinite;
+}
+@keyframes orbFloat {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33%     { transform: translate(28px,-36px) scale(1.04); }
+  66%     { transform: translate(-18px,26px) scale(0.97); }
+}
+
+/* ══════════════════════════════════════════════
+   PRIMLAND-STYLE REVEAL SYSTEM
+   ──────────────────────────────────────────────
+   • Bidirectional: elements hide when scrolling OUT
+     and reveal when scrolling back IN.
+   • 1.8s expo curve = weighted, luxury feel.
+   • Blur adds depth — content "materialises" from fog.
+   • Stagger delays allow groups to cascade naturally.
+   ══════════════════════════════════════════════ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(52px);
+  filter: blur(7px);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-52px);
+  filter: blur(5px);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(52px);
+  filter: blur(5px);
+}
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.88) translateY(28px);
+  filter: blur(6px);
+}
+
+/* Shared transition */
+.reveal,
+.reveal-left,
+.reveal-right,
+.reveal-scale {
+  transition:
+    opacity   1.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 1.9s cubic-bezier(0.16, 1, 0.3, 1),
+    filter    1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform, filter;
+}
+
+/* Visible — all reset */
+.reveal.in,
+.reveal-left.in,
+.reveal-right.in,
+.reveal-scale.in {
+  opacity: 1;
+  transform: none;
+  filter: blur(0px);
+}
+
+/* Stagger delays */
+.d1 { transition-delay: 0.08s !important; }
+.d2 { transition-delay: 0.16s !important; }
+.d3 { transition-delay: 0.24s !important; }
+.d4 { transition-delay: 0.32s !important; }
+.d5 { transition-delay: 0.40s !important; }
+.d6 { transition-delay: 0.50s !important; }
+.d7 { transition-delay: 0.62s !important; }
+
+/* ── Section connector ── */
+.scene-line {
+  width: 1px; height: 90px;
+  background: linear-gradient(to bottom, transparent, var(--ember), transparent);
+  margin: 0 auto;
+}
+
+/* ══════════════════════════════════════════════
+   CARDS — Layered frosted glass with texture
+   ══════════════════════════════════════════════ */
+.card {
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.040) 0%,
+    rgba(255,255,255,0.020) 50%,
+    rgba(255,255,255,0.028) 100%
+  );
+  border: 1px solid rgba(255,255,255,0.075);
+  border-radius: 18px;
+  backdrop-filter: blur(28px) saturate(1.4) brightness(1.02);
+  -webkit-backdrop-filter: blur(28px) saturate(1.4) brightness(1.02);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.07),
+    inset 0 -1px 0 rgba(0,0,0,0.18),
+    inset 1px 0 0 rgba(255,255,255,0.025),
+    0 2px 4px rgba(0,0,0,0.2),
+    0 8px 28px rgba(0,0,0,0.38),
+    0 20px 60px rgba(0,0,0,0.22);
+  transition:
+    border-color 0.7s cubic-bezier(0.16,1,0.3,1),
+    box-shadow   0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.card:hover {
+  border-color: rgba(232,96,44,0.20);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.09),
+    inset 0 -1px 0 rgba(0,0,0,0.18),
+    inset 1px 0 0 rgba(255,255,255,0.03),
+    0 0 0 1px rgba(232,96,44,0.06),
+    0 12px 40px rgba(232,96,44,0.08),
+    0 28px 80px rgba(0,0,0,0.5);
+}
+
+/* ── Tag pills ── */
+.tag {
+  display: inline-block;
+  font-family: 'SF Mono','Fira Code',monospace;
+  font-size: 10px; letter-spacing: 0.05em;
+  padding: 4px 12px;
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 40px;
+  color: rgba(255,255,255,0.38);
+  background: rgba(255,255,255,0.030);
+  transition: border-color .45s, color .45s, background .45s, transform .35s;
+}
+.tag:hover {
+  border-color: rgba(232,96,44,0.38);
+  color: var(--ember);
+  background: rgba(232,96,44,0.07);
+  transform: translateY(-1px);
+}
+
+/* ── Typography ── */
+.section-label {
+  font-family: 'SF Mono','Fira Code',monospace;
+  font-size: 10px; letter-spacing: 0.26em;
+  text-transform: uppercase; color: var(--ember); opacity: 0.72;
+}
+.display {
+  font-family: 'Times New Roman', Georgia, Times, serif;
+  font-weight: 300; line-height: 0.93; letter-spacing: -0.02em;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+  .reveal,.reveal-left,.reveal-right,.reveal-scale {
+    opacity: 1 !important; transform: none !important; filter: none !important;
+  }
+}
+
+/* ════════════════════════════════════════
+   CARD ENTRANCE ANIMATIONS — Primland style
+   Content within cards fades up with staggered delays
+   after the card itself reveals
+   ════════════════════════════════════════ */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+/* When a card is inside a visible reveal wrapper, animate its inner elements */
+.reveal.in .card-img   { animation: scaleIn 1.4s cubic-bezier(0.16,1,0.3,1) both; }
+.reveal.in .card-title { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
+.reveal.in .card-body  { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
+.reveal.in .card-tags  { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.35s both; }
+.reveal.in .card-meta  { animation: fadeIn  1.2s cubic-bezier(0.16,1,0.3,1) 0.1s  both; }
+
+/* Same for left/right/scale variants */
+.reveal-left.in  .card-img   { animation: scaleIn 1.4s cubic-bezier(0.16,1,0.3,1) both; }
+.reveal-left.in  .card-title { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
+.reveal-left.in  .card-body  { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
+.reveal-left.in  .card-tags  { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.35s both; }
+.reveal-right.in .card-img   { animation: scaleIn 1.4s cubic-bezier(0.16,1,0.3,1) both; }
+.reveal-right.in .card-title { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
+.reveal-right.in .card-body  { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
+.reveal-right.in .card-tags  { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.35s both; }
+.reveal-scale.in .card-img   { animation: scaleIn 1.4s cubic-bezier(0.16,1,0.3,1) both; }
+.reveal-scale.in .card-title { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.15s both; }
+.reveal-scale.in .card-body  { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.25s both; }
+.reveal-scale.in .card-tags  { animation: fadeUp  1.4s cubic-bezier(0.16,1,0.3,1) 0.35s both; }
+
+/* ── Experience timeline card image area ── */
+.exp-img     { animation: scaleIn 1.6s cubic-bezier(0.16,1,0.3,1) both; }
+.exp-content { animation: fadeUp  1.6s cubic-bezier(0.16,1,0.3,1) 0.2s  both; }
+
+/* ── Hover glow pulse on cards ── */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 24px rgba(0,0,0,0.4); }
+  50%       { box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 40px rgba(232,96,44,0.07), 0 16px 60px rgba(0,0,0,0.5); }
+}
+
+/* ── Section scene connector pulse ── */
+@keyframes lineGlow {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; filter: drop-shadow(0 0 4px var(--ember)); }
+}
+.scene-line { animation: lineGlow 3s ease-in-out infinite; }
+
+/* ── Experience section responsive (replaces inline <style> to avoid hydration mismatch) ── */
+@media (max-width: 700px) {
+  .exp-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .exp-timeline-line {
+    display: none;
+  }
+  .exp-timeline-dot {
+    display: none;
+  }
+}
