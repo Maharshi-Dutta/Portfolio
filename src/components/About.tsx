@@ -6,7 +6,7 @@ const education = [
     degree: 'MSc — Artificial Intelligence & Machine Learning',
     school: 'University of Limerick',
     location: 'Limerick, Ireland',
-    period: 'Sep 2022 – Present',
+    period: 'Aug 2024 – Sep 2025',
     current: true,
     badge: 'In Progress',
     details: [
@@ -19,7 +19,7 @@ const education = [
     degree: "Bachelor's in Software Engineering",
     school: 'Institute of Engineering and Management',
     location: 'India',
-    period: '2017 – 2021',
+    period: 'Sep 2021 – June 2024',
     current: false,
     badge: 'Completed',
     details: [
