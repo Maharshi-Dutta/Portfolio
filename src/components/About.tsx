@@ -8,7 +8,7 @@ const education = [
     location: 'Limerick, Ireland',
     period: 'Aug 2024 – Sep 2025',
     current: true,
-    badge: 'In Progress',
+    badge: 'Completed',
     details: [
       'Relevant areas: distributed systems, data engineering, backend architecture, algorithm design',
       'Research focus: RAG architectures, hybrid retrieval, LLM evaluation frameworks',
