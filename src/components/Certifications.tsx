@@ -17,7 +17,7 @@ const certs = [
   {
     type: 'aws' as const,
     name: 'AWS Academy Graduate — Cloud Foundations',
-    issuer: 'Amazon Web Services (AWS)', date: '2025',
+    issuer: 'Amazon Web Services (AWS)', date: '2024',
     description: 'AWS Academy certification covering cloud architecture fundamentals, core AWS services, IAM, security best practices, infrastructure management, and cloud pricing models.',
     skills: ['AWS EC2', 'AWS S3', 'IAM', 'Cloud Architecture', 'Security', 'Pricing Models'],
     accent: '#8ec8e8', featured: false,
